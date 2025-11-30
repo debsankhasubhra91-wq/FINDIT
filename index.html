@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FINDIT — Campus Lost & Found</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/hamburger.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <button id="menu-btn" aria-label="Open Menu" aria-expanded="false" aria-controls="sidebar" style="display:none;">☰</button>
+        <div class="brand" aria-hidden="true">
+          <h1 class="app-title">FINDIT <span class="text-rotate" id="rotatingHeader"></span></h1>
+          <p class="subtitle">Helping you locate <strong><span id="subtitleRotating" class="text-rotate">lost items</span></strong> around campus</p>
+        </div>
+        <nav class="header-nav" role="navigation" aria-label="Main Navigation">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+        </nav>
+        <div class="header-actions">
+          <a class="nav-link open-add" href="profile.html#add">New Item</a>
+        </div>
+      </div>
+    </header>
+    <div id="overlay"></div>
+    <aside id="sidebar" aria-hidden="true">
+      <div class="sidebar-header">FINDIT</div>
+      <button class="new-chat-btn">New Item</button>
+      <nav style="margin-top:12px">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="profile.html">Profile</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a class="nav-link" href="settings.html">Settings</a>
+      </nav>
+    </aside>
+
+    <main class="container">
+      <section class="left-col">
+        <div class="card">
+          <h2>Submit a Lost Item</h2>
+          <p>To add a lost item, please use your <a href="profile.html#add" class="nav-link">Profile</a>. The add form and private contact details are available there.</p>
+          <div style="margin-top:12px"><a class="btn btn-primary" href="profile.html#add">Go to Profile — Add Item</a></div>
+        </div>
+
+        <div class="card help">
+          <h3>Tips to find items</h3>
+          <ul>
+            <li>Include location and unique features.</li>
+            <li>Upload a photo link if available.</li>
+            <li>Contact details help reunite items faster.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="right-col">
+        <div class="toolbar">
+          <input id="searchBox" type="search" placeholder="Search by name or location">
+          <select id="filterState">
+            <option value="all">All</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found</option>
+          </select>
+          <select id="sortBy" style="margin-left:6px">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="name">Name</option>
+            <option value="location">Location</option>
+          </select>
+          <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+            <span id="itemsCount" style="font-size:13px;color:var(--muted)">0 items</span>
+          </div>
+        </div>
+
+        <div id="itemsList" class="items-list">
+          <!-- Items will be dynamically rendered here -->
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>FINDIT — Simple Campus Lost & Found</small>
+    </footer>
+
+    <!-- Dock for quick actions -->
+    <div class="dock-outer" id="appDock">
+      <div class="dock-panel" id="dockPanel" style="height:68px">
+        <div class="dock-item" data-action="add" title="Add item" role="button" aria-label="Add item">
+          <div class="dock-icon">➕</div>
+          <div class="dock-label">Add Item</div>
+        </div>
+        <div class="dock-item" data-action="search" title="Focus search" role="button" aria-label="Focus search">
+          <div class="dock-icon">🔎</div>
+          <div class="dock-label">Search</div>
+        </div>
+        <!-- Clear All dock item removed -->
+        <div class="dock-item" data-action="showall" title="Show all" role="button" aria-label="Show all">
+          <div class="dock-icon">📋</div>
+          <div class="dock-label">Show all</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../javascript/spa.js"></script>
+    <script src="../javascript/nav.js"></script>
+    <script src="../javascript/hamburger.js"></script>
+    <script src="../javascript/script.js"></script>
+    <script src="../javascript/dock.js"></script>
+    <script src="../javascript/rotatingText.js"></script>
+    <script>
+      // initialize rotating header
+      document.addEventListener('DOMContentLoaded', () => {
+        const head = document.getElementById('rotatingHeader');
+        const subtitle = document.getElementById('subtitleRotating');
+        if(window.createRotatingText){
+          const headerRot = createRotatingText(head, ['— Helping', '— Find', '— Recover'], {interval: 2600, split: 'words', stagger: 20});
+          const subtitleRot = createRotatingText(subtitle, ['lost items', 'lost books', 'lost gadgets', 'left belongings'], {interval: 2800, split: 'words', stagger: 25});
+        }
+        // fade in header
+        setTimeout(()=>{ const hh = document.querySelector('.app-header'); if(hh) hh.classList.add('visible'); }, 100);
+      });
+    </script>
+  </body>
+  </html>
