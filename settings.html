@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FINDIT — Settings</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/hamburger.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <button id="menu-btn" aria-label="Open Menu" aria-expanded="false" aria-controls="sidebar" style="display:none;">☰</button>
+        <div class="brand" aria-hidden="true">
+          <h1 class="app-title">FINDIT <span class="text-rotate" id="rotatingHeader"></span></h1>
+          <p class="subtitle">Adjust app preferences</p>
+        </div>
+        <nav class="header-nav" role="navigation" aria-label="Main Navigation">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+        </nav>
+        <div class="header-actions">
+          <a class="nav-link open-add" href="profile.html#add">New Item</a>
+        </div>
+      </div>
+    </header>
+    <div id="overlay"></div>
+    <aside id="sidebar" aria-hidden="true">
+      <div class="sidebar-header">FINDIT</div>
+      <button class="new-chat-btn">New Item</button>
+      <nav style="margin-top:12px">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="profile.html">Profile</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a class="nav-link" href="settings.html">Settings</a>
+      </nav>
+    </aside>
+    <script src="../javascript/spa.js"></script>
+    <script src="../javascript/nav.js"></script>
+    <script src="../javascript/hamburger.js"></script>
+    <script src="../javascript/rotatingText.js"></script>
+    <script src="../javascript/settings.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const head = document.getElementById('rotatingHeader');
+        const subtitle = document.getElementById('subtitleRotating');
+        if(window.createRotatingText){
+          createRotatingText(head, ['— Helping', '— Find', '— Recover'], {interval: 2600, split: 'words', stagger: 20});
+          createRotatingText(subtitle, ['lost items', 'lost books', 'lost gadgets', 'left belongings'], {interval: 2800, split: 'words', stagger: 25});
+        }
+        setTimeout(()=>{ const hh = document.querySelector('.app-header'); if(hh) hh.classList.add('visible'); }, 100);
+      });
+    </script>
+
+    <main class="container">
+      <section class="left-col">
+        <div class="card">
+          <h2>Application settings</h2>
+          <label for="themeSelect">Theme</label>
+          <select id="themeSelect">
+            <option value="system">System (auto)</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="compact">Compact (UI density)</option>
+          </select>
+
+          <label for="languageSelect" style="margin-top:10px">Language</label>
+          <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="bn">বাংলা</option>
+          </select>
+
+          <label style="margin-top:10px">Notifications</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="enableNotifications" type="checkbox"> <label for="enableNotifications" style="margin:0">Enable email notifications</label>
+          </div>
+
+          <label style="margin-top:10px">Auto backup</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="autoBackup" type="checkbox"> <label for="autoBackup" style="margin:0">Keep periodic local backups of data</label>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button id="saveSettings" class="btn btn-primary">Save settings</button>
+            <button id="resetSettings" class="btn">Reset settings</button>
+            <button id="exportSettings" class="btn">Export settings</button>
+            <label for="importSettings" class="btn" style="cursor:pointer;margin:0">Import</label>
+            <input id="importSettings" type="file" accept="application/json" style="display:none" />
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>FINDIT — Settings</small>
+    </footer>
+  </body>
+</html>
