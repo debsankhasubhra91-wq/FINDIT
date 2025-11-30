@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FINDIT Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/hamburger.css">
+  </head>
+  <body>
+    <script>
+      // Require simple client-side 'loggedIn' flag; redirect to login if missing
+      try {
+        if (!sessionStorage.getItem('loggedIn')) {
+          window.location.href = 'fourm.html';
+        }
+      } catch (e) {
+        // if storage unavailable, allow access (graceful fallback)
+      }
+    </script>
+    <header class="app-header">
+      <div class="header-inner">
+        <button id="menu-btn" aria-label="Open Menu" aria-expanded="false" aria-controls="sidebar" style="display:none;">☰</button>
+        <div class="brand" aria-hidden="true">
+          <h1 class="app-title">FINDIT <span class="text-rotate" id="rotatingHeader"></span></h1>
+          <p class="subtitle">Helping you locate <strong><span id="subtitleRotating" class="text-rotate">lost items</span></strong> around campus</p>
+        </div>
+        <nav class="header-nav" role="navigation" aria-label="Main Navigation">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+        </nav>
+        <div class="header-actions">
+          <a class="nav-link open-add" href="profile.html#add">New Item</a>
+          <button id="logoutBtn" class="nav-link" style="background:none;border:none;cursor:pointer;padding:0 8px;color:inherit;">Logout</button>
+        </div>
+      </div>
+    </header>
+    <div id="overlay"></div>
+    <aside id="sidebar" aria-hidden="true">
+      <div class="sidebar-header">FINDIT</div>
+      <button class="new-chat-btn">New Item</button>
+      <nav style="margin-top:12px">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="profile.html">Profile</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a class="nav-link" href="settings.html">Settings</a>
+      </nav>
+    </aside>
+    <main class="container">
+      <section style="flex:1">
+        <div class="card">
+          <h2>Summary</h2>
+          <div class="dashboard-nav" role="tablist" aria-label="Dashboard Sections">
+            <button id="tab-overview" class="dashboard-tab" data-section="overview" role="tab" aria-controls="overviewSection" aria-selected="true">Overview</button>
+            <button id="tab-recent" class="dashboard-tab" data-section="recent" role="tab" aria-controls="recentSection">Recent Items</button>
+            <button id="tab-locations" class="dashboard-tab" data-section="locations" role="tab" aria-controls="locationsSection">Top Locations</button>
+          </div>
+          <div class="dashboard-grid dashboard-section" id="overviewSection">
+            <div class="dashboard-card">
+              <div class="dashboard-card-title">Total Items</div>
+              <div id="totalCount" class="dashboard-card-value">0</div>
+            </div>
+            <div class="dashboard-card">
+              <div class="dashboard-card-title">Lost</div>
+              <div id="lostCount" class="dashboard-card-value">0</div>
+            </div>
+            <div class="dashboard-card">
+              <div class="dashboard-card-title">Found</div>
+              <div id="foundCount" class="dashboard-card-value">0</div>
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <div style="display:flex;gap:8px;align-items:center">
+              <button id="goToApp" class="btn-primary">Open FINDIT App</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="notificationsCard">
+          <h2>Notifications</h2>
+          <div id="notificationsContent" class="meta">You have no notifications (demo)</div>
+          <div style="margin-top:8px"><a class="btn" href="profile.html">Manage notification settings in Profile</a></div>
+        </div>
+
+        <div class="card dashboard-section" id="recentSection" style="display:none">
+          <h2>Recent Items</h2>
+          <div id="recentList" class="items-list" style="display:block;grid-template-columns:unset"></div>
+        </div>
+
+        <div class="card dashboard-section" id="locationsSection" style="display:none">
+          <h2>Top Locations</h2>
+          <div id="topLocations">(No data)</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>FINDIT Dashboard</small>
+    </footer>
+
+    <script src="../javascript/spa.js"></script>
+    <script src="../javascript/nav.js"></script>
+    <script src="../javascript/hamburger.js"></script>
+    <script src="../javascript/dashboard.js"></script>
+    <script src="../javascript/rotatingText.js"></script>
+    <script>
+      // initialize rotating header
+      document.addEventListener('DOMContentLoaded', () => {
+        const head = document.getElementById('rotatingHeader');
+        const subtitle = document.getElementById('subtitleRotating');
+        if(window.createRotatingText){
+          createRotatingText(head, ['— Helping', '— Find', '— Recover'], {interval: 2600, split: 'words', stagger: 20});
+          createRotatingText(subtitle, ['lost items', 'lost books', 'lost gadgets', 'left belongings'], {interval: 2800, split: 'words', stagger: 25});
+        }
+        setTimeout(()=>{ const hh = document.querySelector('.app-header'); if(hh) hh.classList.add('visible'); }, 100);
+
+        // Show notification status from settings
+        try{
+          const raw = localStorage.getItem('findit_settings_v1');
+          const settings = raw ? JSON.parse(raw) : null;
+          const notifEl = document.getElementById('notificationsContent');
+          if(notifEl){
+            if(settings && settings.notifications){
+              notifEl.textContent = `Notifications are enabled — reports will go to ${settings.reportEmail || 'your email'}`;
+            } else {
+              notifEl.textContent = 'Notifications are disabled (enable in Settings)';
+            }
+          }
+        }catch(e){ /* ignore */ }
+      });
+      // wire logout button
+      (function(){
+        const lbtn = document.getElementById('logoutBtn');
+        if(lbtn){
+          lbtn.addEventListener('click', function(){
+            try{ sessionStorage.removeItem('loggedIn'); sessionStorage.removeItem('findit_user'); }catch(e){}
+            window.location.href = 'fourm.html';
+          });
+        }
+      })();
+    </script>
+  </body>
+  </html>
