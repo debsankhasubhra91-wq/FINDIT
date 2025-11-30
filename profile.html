@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FINDIT — Profile</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/hamburger.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <button id="menu-btn" aria-label="Open Menu" aria-expanded="false" aria-controls="sidebar" style="display:none;">☰</button>
+        <div class="brand" aria-hidden="true">
+          <h1 class="app-title">FINDIT <span class="text-rotate" id="rotatingHeader"></span></h1>
+          <p class="subtitle">Manage your account</p>
+        </div>
+        <nav class="header-nav" role="navigation" aria-label="Main Navigation">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+        </nav>
+        <div class="header-actions">
+          <a class="nav-link open-add" href="profile.html#add">New Item</a>
+          <a class="nav-link" href="#">Logout</a>
+        </div>
+      </div>
+    </header>
+    <div id="overlay"></div>
+    <aside id="sidebar" aria-hidden="true">
+      <div class="sidebar-header">FINDIT</div>
+      <button class="new-chat-btn">New Item</button>
+      <nav style="margin-top:12px">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="profile.html">Profile</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a class="nav-link" href="settings.html">Settings</a>
+      </nav>
+    </aside>
+    <script src="../javascript/spa.js"></script>
+    <script src="../javascript/nav.js"></script>
+    <script src="../javascript/hamburger.js"></script>
+    <script src="../javascript/script.js"></script>
+    <script src="../javascript/rotatingText.js"></script>
+    <script>
+      // Keep profile contact storage and Save behavior
+      document.addEventListener('DOMContentLoaded', () => {
+        const profileContact = document.getElementById('profileContact');
+        const profileStudentId = document.getElementById('profileStudentId');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        // load existing profile info (structured object preferred, fallback to old contact-only key)
+        try{
+          const raw = localStorage.getItem('findit_profile');
+          if(raw){ const parsed = JSON.parse(raw); if(parsed && parsed.contact) profileContact.value = parsed.contact; if(parsed && parsed.studentId) profileStudentId.value = parsed.studentId; }
+          else { const stored = localStorage.getItem('findit_profile_contact'); if(stored) profileContact.value = stored; }
+        }catch(e){ const stored = localStorage.getItem('findit_profile_contact'); if(stored) profileContact.value = stored; }
+
+        if(saveProfileBtn){
+          saveProfileBtn.addEventListener('click', () => {
+            const contactVal = (profileContact && profileContact.value) ? profileContact.value.trim() : '';
+            const studentIdVal = (profileStudentId && profileStudentId.value) ? profileStudentId.value.trim() : '';
+            try{ localStorage.setItem('findit_profile', JSON.stringify({ contact: contactVal, studentId: studentIdVal })); }catch(e){}
+            localStorage.setItem('findit_profile_contact', contactVal);
+            alert('Profile saved');
+          });
+        }
+      });
+      // initialize rotating header (page uses FINDIT brand now)
+      document.addEventListener('DOMContentLoaded', () => {
+        const head = document.getElementById('rotatingHeader');
+        const subtitle = document.getElementById('subtitleRotating');
+        if(window.createRotatingText){
+          createRotatingText(head, ['— Helping', '— Find', '— Recover'], {interval: 2600, split: 'words', stagger: 20});
+          createRotatingText(subtitle, ['lost items', 'lost books', 'lost gadgets', 'left belongings'], {interval: 2800, split: 'words', stagger: 25});
+        }
+        setTimeout(()=>{ const hh = document.querySelector('.app-header'); if(hh) hh.classList.add('visible'); }, 100);
+      });
+    </script>
+
+    <main class="container">
+      <section class="left-col">
+        <div class="card">
+          <h2>Your profile</h2>
+          <p>PLEASE FILL ALL THE CREDENTIALS</p>
+          <label for="username">Display name</label>
+          <input id="username" type="text" placeholder="Campus user">
+          <label for="profileContact" style="margin-top:8px">Contact (email or phone)</label>
+          <input id="profileContact" type="text" placeholder="Email or phone" />
+
+          <label for="profileStudentId" style="margin-top:8px">ID (student / employee)</label>
+          <input id="profileStudentId" type="text" placeholder="Student ID or Employee ID (optional)" />
+          <hr style="margin:12px 0" />
+          <!-- Profile-only section remains here (display name, contact and Save) -->
+          <div style="margin-top:8px"><button id="saveProfileBtn" class="btn btn-primary">Save</button></div>
+        </div>
+      </section>
+      <section class="right-col">
+        <div class="card">
+          <h2>Add an Item (from your profile)</h2>
+          <!-- Reuse the same add item form markup as index.html to make behavior identical -->
+          <form id="addItemForm">
+            <label for="itemName">Item name</label>
+            <input type="text" id="itemName" placeholder="e.g. Black backpack" required>
+
+            <label for="itemDesc">Description</label>
+            <textarea id="itemDesc" rows="3" placeholder="Any distinguishing features"></textarea>
+
+            <label for="itemLocation">Location (building/area)</label>
+            <input type="text" id="itemLocation" placeholder="e.g. Science Block, 2nd floor" required>
+
+            <label for="itemDate">Date lost</label>
+            <input type="date" id="itemDate">
+
+            <label for="itemContact">Contact (email or phone)</label>
+            <input type="text" id="itemContact" placeholder="Email or phone to reach you">
+
+            <label for="itemImageFile" style="margin-top:8px;display:block">Or upload a photo (optional, up to 50 MB)</label>
+            <input type="file" id="itemImageFile" accept="image/*" style="width: 100%; max-width: 400px;" onchange="validateFileSize(this)">
+            <div style="margin-top:8px;display:block"><img id="imagePreview" src="" alt="Preview" style="max-width:100%;border-radius:6px;display:none;height:120px;object-fit:cover;border:1px solid var(--border)"/></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Add Item</button>
+              <button type="button" id="clearForm">Clear</button>
+              <button type="button" id="cancelEdit" class="btn" style="display:none">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <small>FINDIT — Profile</small>
+    </footer>
+  </body>
+</html>
