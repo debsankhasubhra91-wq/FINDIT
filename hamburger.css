@@ -1,0 +1,57 @@
+/* General Reset & Dark Theme for hamburger sidebar */
+/* Copied from sanhka/hamburger.css and slightly adjusted for app */
+body {
+    margin: 0;
+    font-family: 'Google Sans', Arial, sans-serif;
+}
+.hamburger-header { display:flex; gap:12px; align-items:center }
+
+/* The Hamburger Button */
+#menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+#menu-btn:hover { background-color: rgba(0,0,0,0.06); }
+
+/* --- THE SIDEBAR (DRAWER) --- */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--card, #fff);
+    z-index: 1400;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(.2,.9,.2,1);
+    padding: 12px;
+    box-shadow: 0 24px 36px rgba(11,11,11,0.16);
+    color:var(--text);
+}
+#sidebar.open{ transform: translateX(0); }
+
+#sidebar .sidebar-header{ margin-bottom: 12px; font-weight:700; }
+
+#overlay{ position: fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.45); z-index: 1380; opacity:0; visibility:hidden; transition: opacity 0.3s ease; }
+#overlay.active{ opacity:1; visibility:visible; }
+
+#sidebar a, #sidebar li{ color:var(--text); text-decoration:none; display:block; padding:10px 8px; border-radius:6px }
+#sidebar a:hover, #sidebar li:hover{ background: rgba(0,0,0,0.04); }
+
+#sidebar .new-chat-btn{ width:100%; padding:10px 12px; border-radius:12px; background:var(--accent); border:none; color:white; font-weight:600 }
+
+/* Mobile friendly: make sure sidebar is off-canvas */
+@media (max-width:900px){ #sidebar{ width: 90vw; } }
+/* Mobile: show menu button and hide full header nav */
+@media (max-width:900px){
+    #menu-btn{ display:block !important; }
+    .header-nav{ display:none !important; }
+}
