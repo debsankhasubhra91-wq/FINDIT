@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FINDIT — Contact</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/hamburger.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-inner">
+        <button id="menu-btn" aria-expanded="false" aria-controls="sidebar" aria-label="Open menu" style="display:none;">☰</button>
+        <div class="brand" aria-hidden="true">
+          <h1 class="app-title">FINDIT <span class="text-rotate" id="rotatingHeader"></span></h1>
+          <p class="subtitle">Contact us for support</p>
+        </div>
+        <nav class="header-nav" role="navigation" aria-label="Main Navigation">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+        </nav>
+        <div class="header-actions">
+          <a class="nav-link open-add" href="profile.html#add">New Item</a>
+        </div>
+      </div>
+    </header>
+    <div id="overlay"></div>
+    <aside id="sidebar" aria-hidden="true">
+      <div class="sidebar-header">FINDIT</div>
+      <button class="new-chat-btn">New Item</button>
+      <nav style="margin-top:12px">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="profile.html">Profile</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+        <a class="nav-link" href="settings.html">Settings</a>
+      </nav>
+    </aside>
+    <script src="../javascript/spa.js"></script>
+    <script src="../javascript/nav.js"></script>
+    <script src="../javascript/hamburger.js"></script>
+
+    <main class="container">
+      <div class="card">
+        <h2>Contact Us</h2>
+          <p>For support, reports, or feature requests, please email <a href="mailto:diptanudebnath43@gmail.com">diptanudebnath43@gmail.com</a> or use the feedback form below. All reports and information will be sent directly to this email.</p>
+        <!-- Contact form: replace FORM_ID below with your Formspree form id (or keep for JS-handled submission). -->
+        <form id="contact-form" class="contact-form" method="POST" action="https://formspree.io/f/FORM_ID" enctype="multipart/form-data">
+          <label for="name">Name <span aria-hidden="true">*</span></label>
+          <input id="name" name="name" type="text" placeholder="Your name" required>
+
+          <label for="email">Email <span aria-hidden="true">*</span></label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject" type="text" placeholder="Short subject">
+
+          <label for="message">Message <span aria-hidden="true">*</span></label>
+          <textarea id="message" name="message" rows="6" style="width:100%" placeholder="Describe your issue or request" required></textarea>
+
+          <label for="attachment">Attachment (optional)</label>
+          <input id="attachment" name="attachment" type="file" accept="image/*,.pdf,.txt">
+
+          <div class="form-actions" style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+            <button type="submit" class="btn btn-primary">Send Feedback</button>
+            <div id="contact-status" aria-live="polite" style="font-size:0.95rem"></div>
+          </div>
+
+          <!-- For security reasons Formspree requires you to configure the destination email in their dashboard. -->
+        </form>
+      </div>
+    </main>
+    <script src="../javascript/contact.js"></script>
+    <script src="../javascript/rotatingText.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const head = document.getElementById('rotatingHeader');
+        // keep contact page subtitle static, only animate header words
+        if(window.createRotatingText){
+          createRotatingText(head, ['— Helping', '— Find', '— Recover'], {interval: 2600, split: 'words', stagger: 20});
+        }
+        setTimeout(()=>{ const hh = document.querySelector('.app-header'); if(hh) hh.classList.add('visible'); }, 100);
+      });
+    </script>
+    <footer class="app-footer">
+      <small>FINDIT — Contact</small>
+    </footer>
+  </body>
+</html> 
